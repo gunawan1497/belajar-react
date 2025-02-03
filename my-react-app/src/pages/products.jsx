@@ -2,7 +2,9 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Button from "../components/Elements/Button";
 import CartProduct from "../components/Fragments/CardProduct";
 import Counter from "../components/Fragments/Counter";
-import { getProduct } from "../services/product.service";
+import { getProducts } from "../services/product.service";
+import { getUsername } from "../services/auth.service";
+import { useLogin } from "../hooks/useLogin";
 // import Counter from "../components/Fragments/Counter";
 
 // const products = [
@@ -29,7 +31,7 @@ import { getProduct } from "../services/product.service";
 //     },
 // ];
 
-const email = localStorage.getItem('email');
+// const token = localStorage.getItem('token');
 
 const ProductsPage = () => {
     const [cart, setCart] = useState([
@@ -43,13 +45,26 @@ const ProductsPage = () => {
 
     const [products, setProducts] = useState([]);
 
+    // const [username, setUsername] = useState("");
+
+    const username = useLogin();
+
     useEffect(() => {
         // setCart([{ id: 1, qty: 1 }]);
         setCart(JSON.parse(localStorage.getItem('cart')) || []);
     }, []);
 
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     if (token) {
+    //         setUsername(getUsername(token));
+    //     } else {
+    //         window.location.href = "/login";
+    //     }
+    // }, []);
+
     useEffect(() => {
-        getProduct((data) => {
+        getProducts((data) => {
         setProducts(data);       
         });
     },[]);
@@ -66,8 +81,8 @@ const ProductsPage = () => {
     }, [cart, products]);
 
     const handleLogout = () => {
-        localStorage.removeItem('email');
-        localStorage.removeItem('password');
+        localStorage.removeItem('token');
+        // localStorage.removeItem('password');
         window.location.href = "/login";
     };
 
@@ -116,7 +131,7 @@ const ProductsPage = () => {
   return (
     <Fragment>
         <div className="flex justify-end h-20 bg-blue-600 text-white items-center px-10">
-            {email}
+            {username}
             <Button className="ml-5 bg-black" onClick={handleLogout}>Logout</Button>
         </div>
         <div className="flex justify-center py-5">
@@ -137,7 +152,7 @@ const ProductsPage = () => {
                     //     <CartProduct.Footer price={product.price} id={product.id} handleAddToCart={handleAddToCartRef} />
                     // </CartProduct>
                     <CartProduct key={product.id}>
-                        <CartProduct.Header image={product.image} />
+                        <CartProduct.Header image={product.image} id={product.id} />
                         <CartProduct.Body name={product.title}>
                             {product.description}
                         </CartProduct.Body>
