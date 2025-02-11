@@ -1,34 +1,73 @@
-import { useId } from "react";
+import { memo, useState } from "react";
 
-// function Input(props) {
-//   const { id } = props;
-//   const inputId = id || 'input';
-function Input(props) {
-  const { id = 'input', label } = props;
-  const inputId = useId();
+// const TodoList = (props) => {
+//   const { todos } = props;
+//   // console.log(todos);  
+//   console.log('call todolist');  
+//   return (
+//     <>
+//       <h2>My Todos</h2>
+//       {todos.map((todo, index) => {
+//         return <p key={`${todo}-${index}`}>{todo}</p>
+//       })}
+//     </>
+//   );
+// };
+
+const TodoList = memo((props) => {
+  // const { todos, count } = props;
+  const { todos } = props;
+  // console.log(todos);  
+  console.log('call todolist');  
   return (
     <>
-      <label htmlFor="">
-        <span>{label}</span>
-        {/* <input type="text" id={inputId} /> */}
-        <input type="text" id={`${inputId}-${id}`} />
-      </label>
-      <p aria-details={`${inputId}-${id}`}>Name should contain at least first name and last name</p>
+      <h2>My Todos</h2>
+      {todos.map((todo, index) => {
+        return <p key={`${todo}-${index}`}>{todo}</p>
+      })}
+      {/* <p>Count: {count}</p> */}
     </>
-  )
-}
+  );
+},
+// () => true,
+// () => false,
+);
+
+// TodoList.displayName = 'TodoList';
+
+// const Counter = (props) => {
+//   const { count } = props;
+//   console.log('call counter');  
+//   return <p>Count: {count}</p>;
+// };
+const Counter = memo ((props) => {
+  const { count } = props;
+  console.log('call counter');  
+  return <p>Count: {count}</p>;
+});
+
+// Counter.displayName = 'Counter';
 
 function App() {
- const inputId = useId();
+  const [count, setCount] = useState(0);
+  const [todos, setTodos] = useState(['Dev', 'Build']);
+
+  const increment = () => {
+    setCount((count) => count + 1);
+  };
+
+  const addTodo = (newTodo) => {
+    setTodos((todos) => [...todos, newTodo]);
+  };
+
   return (
     <>
-      <Input type="text" id={inputId} />
-      {/* <h1>Hello World</h1> */}
-      <Input id="firstname"/>
-      <Input id="firstname"/>
-      <Input />
-      <Input />
-      <Input />
+      {/* <TodoList todos={todos} count={count}/> */}
+      <TodoList todos={todos}/>
+      <button onClick={() => addTodo('Playing Football')}>Add Todo</button>
+      {/* <p>Count: {count}</p> */}
+      <Counter count={count}/>
+      <button onClick={increment}>Increment</button>
     </>
   )
 }
