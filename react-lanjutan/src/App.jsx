@@ -1,10 +1,11 @@
-import ExampleUseMemo from "./components/ExampleUseMemo";
+import ExampleUseCallback from "./components/ExampleUseCallback";
+// import ExampleUseMemo from "./components/ExampleUseMemo";
 
 function App() {
 
   return (
     <>
-      <ExampleUseMemo />
+      <ExampleUseCallback />
     </>
   )
 }
